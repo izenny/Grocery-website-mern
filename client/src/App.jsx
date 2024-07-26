@@ -54,13 +54,14 @@
 import React from 'react'
 import Signup from './Account/Signup'
 import Login from './Account/Login'
-
+import AddProduct from "./Admin/Addproduct";
 
 const App = () => {
   return (
     <div>
-      <Signup/>
-      <Login/>
+      {/* <Signup/>
+      <Login/> */}
+      <AddProduct />
     </div>
   )
 }

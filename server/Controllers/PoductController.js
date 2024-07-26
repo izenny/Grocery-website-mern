@@ -7,11 +7,9 @@ exports.createProduct = async (req, res) => {
       productName: req.body.productName,
       productCode: req.body.productCode,
       description: req.body.description,
-      category: req.body.category,
-      mnfDate: req.body.mnfDate,
-      expDate: req.body.expDate,
       price: req.body.price,
-      quantity: req.body.quantity,
+      category: req.body.category,
+      stock: req.body.stock,
       // productImage: req.body.productImage,
     });
     const newProduct = await product.save();

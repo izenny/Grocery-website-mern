@@ -6,7 +6,9 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   address: { type: String, required: true },
   phone: { type: Number, required: true },
-  role: { type: String, enum: ['admin','customer'], default: 'customer' }
+  role: { type: String, enum: ['admin','customer'], default: 'customer' },
+  cart:[{type: mongoose.Schema.Types.ObjectId, ref: 'Cart'}],
+  wishlist:[{type: mongoose.Schema.Types.ObjectId, ref: 'Wishlist'}]
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);

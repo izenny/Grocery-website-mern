@@ -6,15 +6,15 @@ import Kiwi from "../Images/Kiwi.png";
 
 import Grapes from "../Images/Grapes.png";
 
-const Product = ({productname,description, price, image}) => {
+const Product = ({productName,description, price, image}) => {
   return (
     <div className="m-1 flex h-full  overflow-y-scroll no-scrollbar justify-around flex-wrap ">
       <div className="m-6 relative ">
         <div className="w-[200px] h-[130px] p-2  bg-white shadow  rounded-lg">
           <div className=" flex justify-center flex-col items-center">
-            <h2 className="text-2xl font-Merriweather ">{productname}</h2>
+            <h2 className="text-2xl font-Merriweather ">{productName}</h2>
             <p className="text-xs ">{description}</p>
-            <h1 className="text-lg ">{price}</h1>
+            <h1 className="text-lg ">{price} rs</h1>
           </div>
           <div className="">
             <button className="p-1 m-1 w-16 font-Merriweather text-white hover:scale-105 bg-orange-500 rounded-lg">
