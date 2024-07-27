@@ -1,29 +1,27 @@
 import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { loginApi } from "../Api/LoginApi";
+import { useDispatch } from "react-redux";
+import { userActive } from "../Redux/userredux";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
-
-  const submitLoginCread = async () => {
-    try {
-      const responseMessage = await loginApi({ email, password });
-      if (responseMessage === "Login successfull") {
-        alert("Login successful!");
-        setEmail("");
-        setPassword("");
-        setErrors({});
-      } else {
-        alert("Login failed. Please check your credentials.");
-      }
-    } catch (err) {
-      console.log("login error", err);
-      alert("An error occurred during login. Please try again.");
-    }
-  };
-
+const dispatch =useDispatch()
+const submitLoginCread = async () => {
+  try {
+    const user = await loginApi({ email, password });
+    dispatch(userActive(user));
+    alert("Login successful!");
+    setEmail("");
+    setPassword("");
+    setErrors({});
+  } catch (err) {
+    console.log("login error", err);
+    alert("An error occurred during login. Please try again.");
+  }
+};
   const validateForm = () => {
     const errors = {};
 
