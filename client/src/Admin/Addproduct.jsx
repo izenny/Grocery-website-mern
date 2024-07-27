@@ -34,7 +34,7 @@ const AddProduct = () => {
 
       await newProductApi(formData);
 
-      // Optionally reset the form after successful submission
+      alert("Product successfully created!");
       setProductName("");
       setProductCode("");
       setDescription("");
@@ -44,6 +44,7 @@ const AddProduct = () => {
       setProductImage(null);
       setImagePreview(null); // Reset image preview
     } catch (error) {
+      alert("Product not created!");
       console.log("Error adding product:", error);
     }
   };

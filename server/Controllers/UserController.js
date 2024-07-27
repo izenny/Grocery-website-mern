@@ -52,8 +52,9 @@ exports.loginUser = async (req, res) => {
   const { password: _, ...userDetails } = user.toObject(); // Rename `password` to `_` to avoid conflict
 
     // Respond with success, token, and user details (excluding password)
-    res.status(200).json({ message: 'Login successful', token, ...userDetails });
+    res.status(200).json({ message: 'Login successfull', token, ...userDetails });
   } catch (error) {
+    console.log('incorret cread');
     res.status(500).json({ message: "Server Error", error });
   }
 };
