@@ -1,32 +1,48 @@
-const Product = require("../Modals/ProductSchema");
+const multer = require("multer");
+const path = require("path");
+const Product = require('../Modals/ProductSchema');
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, '../../client/public/ProductImages'));
+  },
+  filename: function (req, file, cb) {
+    const filename = file.fieldname + '-' + Date.now() + path.extname(file.originalname);
+    cb(null, filename);
+  },
+});
+
+const upload = multer({
+  storage: storage,
+}).single("image");
 
 exports.createProduct = async (req, res) => {
-  console.log("Create Product API called"); // Add this log
-  try {
+  console.log("Create Product API called");
+  upload(req, res, async (err) => {
+    if (err) {
+      return res.status(500).json({ message: "Failed to upload image" });
+    }
+    const { productname, productcode, description, price, category, stock } = req.body;
+    let imageFilename = null;
+    if (req.file) {
+      imageFilename = req.file.filename;
+    }
     const product = new Product({
-      productName: req.body.productName,
-      productCode: req.body.productCode,
-      description: req.body.description,
-      price: req.body.price,
-      category: req.body.category,
-      stock: req.body.stock,
-      // productImage: req.body.productImage,
+      productname,
+      productcode,
+      description,
+      price,
+      category,
+      stock,
+      image: imageFilename,
     });
-    const newProduct = await product.save();
-    res.status(201).json(newProduct);
-  } catch (error) {
-    console.log("Error in creating product:", error);
-    res.status(400).json({ message: error.message });
-  }
-};
-
-// Get products by category
-exports.productbyCategory = async (req, res) => {
-  try {
-    const products = await Product.find({ category: req.params.category });
-    res.json(products);
-  } catch (error) {
-    console.log("Error in fetching category products:", error);
-    res.status(400).json({ message: error.message });
-  }
+    try {
+      const newProduct = await product.save();
+      console.log("Product created successfully");
+      res.status(201).json(newProduct);
+    } catch (error) {
+      console.log("Error in creating product:", error);
+      res.status(400).json({ message: error.message });
+    }
+  });
 };

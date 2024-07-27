@@ -9,41 +9,40 @@ const AddProduct = () => {
   const [productCode, setProductCode] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
-  const [price, setPrice] = useState();
-  const [stock, setStock] = useState();
+  const [price, setPrice] = useState(0);
+  const [stock, setStock] = useState(0);
   const [productImage, setProductImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null); // New state for image preview
 
-  const handleImageChange = (e) => {
+  const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProductImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+    setProductImage(file);
+    setImagePreview(URL.createObjectURL(file)); // Set image preview
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await newProductApi({
-        productName,
-        productCode,
-        description,
-        category,
-        price,
-        stock,
-        productImage,
-      });
+      const formData = new FormData();
+      formData.append("productname", productName);
+      formData.append("productcode", productCode);
+      formData.append("description", description);
+      formData.append("category", category);
+      formData.append("price", price);
+      formData.append("stock", stock);
+      formData.append("image", productImage);
+
+      await newProductApi(formData);
+
       // Optionally reset the form after successful submission
       setProductName("");
       setProductCode("");
       setDescription("");
       setCategory("");
-      setPrice();
-      setstock();
+      setPrice(0);
+      setStock(0);
       setProductImage(null);
+      setImagePreview(null); // Reset image preview
     } catch (error) {
       console.log("Error adding product:", error);
     }
@@ -94,10 +93,14 @@ const AddProduct = () => {
                 <option value="" disabled>
                   Select Category
                 </option>
-                <option value="Electronics">Electronics</option>
-                <option value="Fashion">Fashion</option>
-                <option value="Home">Home</option>
-                <option value="Books">Books</option>
+                <option value="Fruits">Fruits</option>
+                <option value="Vegitables">Vegitables</option>
+                <option value="Dairy & Eggs">Dairy & Eggs</option>
+                <option value="Meat & Seafood">Meat & Seafood</option>
+                <option value="Bakery & Bread">Bakery & Bread</option>
+                <option value="Pantry Staples">Pantry Staples</option>
+                <option value="Snacks & Beverages">Snacks & Beverages</option>
+                <option value="Household Supplies">Household Supplies</option>
               </select>
             </div>
             <div className="flex items-center">
@@ -110,7 +113,7 @@ const AddProduct = () => {
               />
             </div>
             <div className="flex items-center">
-              <label className="w-1/3 text-gray-700">stock</label>
+              <label className="w-1/3 text-gray-700">Stock</label>
               <input
                 type="number"
                 value={stock}
@@ -122,8 +125,8 @@ const AddProduct = () => {
               <label className="w-1/3 text-gray-700">Product Image</label>
               <input
                 type="file"
-                accept="image/*"
-                onChange={handleImageChange}
+                name="image"
+                onChange={handleFileChange}
                 className="w-2/3 text-sm p-2 border border-gray-300 rounded-md shadow-sm"
               />
             </div>
@@ -144,7 +147,7 @@ const AddProduct = () => {
           category={category}
           price={price}
           stock={stock}
-          image={productImage}
+          image={imagePreview} // Use image preview URL
         />
       </div>
     </div>

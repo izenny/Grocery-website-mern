@@ -1,9 +1,19 @@
 import axios from "axios";
-export const newProductApi = async (product) => {
+
+export const newProductApi = async (formData) => {
   try {
-    const newPoduct = await axios.post("http://localhost:5000/product/addnewproduct", product);
-    console.log("newproduct ", newPoduct);
+    console.log("newProduct ", formData);
+    const newProduct = await axios.post(
+      "http://localhost:5000/product/addnewproduct",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    console.log("newProduct ", newProduct);
   } catch (err) {
-    console.log("error in product api",err);
+    console.log("error in product api", err);
   }
 };
