@@ -149,7 +149,9 @@ const App = () => {
         <Routes>
           {token ? (
             <Route path="/" element={renderHomePage()}>
-              <Route path="categories/*" element={<Categories/>}/>
+              <Route path="categories/" element={<Categories/>}>
+              </Route>
+              
             </Route>
           ) : (
             <Route path="/*" element={<Account />} />

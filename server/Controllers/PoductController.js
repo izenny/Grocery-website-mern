@@ -46,3 +46,30 @@ exports.createProduct = async (req, res) => {
     }
   });
 };
+
+// fetch product by category
+
+// exports.getProductsByCategory = async (req, res) => {
+//   try {
+//     // const category = req.params.category;
+//     const type = req.body;
+//     const products = await Product.find({ category: type });
+//     res.status(200).json(products);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
+ // Adjust import based on your project structure
+
+
+exports.getProductsByCategory = async (req, res) => {
+  try {
+    const { type } = req.body;
+    const products = type === 'all' 
+      ? await Product.find() 
+      : await Product.find({ category: type });
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
