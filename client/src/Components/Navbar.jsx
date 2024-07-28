@@ -66,6 +66,7 @@ import { IoCartOutline } from "react-icons/io5";
 import { LuUser2 } from "react-icons/lu";
 import { AiOutlineHeart } from "react-icons/ai";
 import { IoIosLeaf } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -79,25 +80,37 @@ const Navbar = () => {
         </div>
         <div className="flex-1  h-full">
           <ul className="flex h-full items-center justify-around font-serif">
-            <li className="hover:scale-110 hover:text-green-700 transform transition-transform duration-200 cursor-pointer">
-              Home
-            </li>
-            <li
-              className=" relative hover:scale-110 hover:text-green-700 transform transition-transform duration-200 cursor-pointer"
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-            >
-              Category
-            </li>
-            <li className="hover:scale-110 hover:text-green-700 transform transition-transform duration-200 cursor-pointer">
-              New Products
-            </li>
-            <li className="hover:scale-110 hover:text-green-700 transform transition-transform duration-200 cursor-pointer">
-              About Us
-            </li>
-            <li className="hover:scale-110 hover:text-green-700 transform transition-transform duration-200 cursor-pointer">
-              Contact
-            </li>
+            <Link to={"/"}>
+              {" "}
+              <li className="hover:scale-110 hover:text-green-700 transform transition-transform duration-200 cursor-pointer">
+                Home
+              </li>
+            </Link>
+            <Link to={"categories"}>
+              <li
+                className=" relative hover:scale-110 hover:text-green-700 transform transition-transform duration-200 cursor-pointer"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+              >
+                Category
+              </li>
+            </Link>
+            <Link to={"newproducts"}>
+              {" "}
+              <li className="hover:scale-110 hover:text-green-700 transform transition-transform duration-200 cursor-pointer">
+                New Products
+              </li>
+            </Link>
+            <Link to={"aboutus"}>
+              <li className="hover:scale-110 hover:text-green-700 transform transition-transform duration-200 cursor-pointer">
+                About Us
+              </li>
+            </Link>
+            <Link to={"contact"}>
+              <li className="hover:scale-110 hover:text-green-700 transform transition-transform duration-200 cursor-pointer">
+                Contact
+              </li>
+            </Link>
           </ul>
         </div>
         <div className="flex justify-evenly items-center w-1/3 mr-4">

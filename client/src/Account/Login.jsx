@@ -4,24 +4,26 @@ import { loginApi } from "../Api/LoginApi";
 import { useDispatch } from "react-redux";
 import { userActive } from "../Redux/userredux";
 
-const Login = () => {
+const Login = ({ toggleForm }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
-const dispatch =useDispatch()
-const submitLoginCread = async () => {
-  try {
-    const user = await loginApi({ email, password });
-    dispatch(userActive(user));
-    alert("Login successful!");
-    setEmail("");
-    setPassword("");
-    setErrors({});
-  } catch (err) {
-    console.log("login error", err);
-    alert("An error occurred during login. Please try again.");
-  }
-};
+  const dispatch = useDispatch();
+
+  const submitLoginCread = async () => {
+    try {
+      const user = await loginApi({ email, password });
+      dispatch(userActive(user));
+      alert("Login successful!");
+      setEmail("");
+      setPassword("");
+      setErrors({});
+    } catch (err) {
+      console.log("login error", err);
+      alert("An error occurred during login. Please try again.");
+    }
+  };
+
   const validateForm = () => {
     const errors = {};
 
@@ -53,7 +55,7 @@ const submitLoginCread = async () => {
   };
 
   return (
-    <div className="login-container font-Merriweather h-screen bg-yellow-300 flex flex-col justify-center items-center">
+    <div className="login-container font-Merriweather h-screen flex flex-col justify-center items-center">
       <div className="w-[20rem] h-[28rem] flex flex-col justify-around items-center bg-white p-6 rounded-lg shadow">
         <h2 className="text-4xl font-madimione mb-4">Login</h2>
         <form onSubmit={loginData} className="w-full">
@@ -101,7 +103,13 @@ const submitLoginCread = async () => {
         </div>
         <div className="mt-2 text-xs">
           <h2>
-            Didn't have an account ? <span className="text-green-800 text-sm hover:cursor-pointer">Register</span>
+            Didn't have an account?{" "}
+            <span
+              className="text-green-800 text-sm hover:cursor-pointer"
+              onClick={toggleForm}
+            >
+              Register
+            </span>
           </h2>
         </div>
       </div>

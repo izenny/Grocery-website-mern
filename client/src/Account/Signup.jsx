@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
+import { signupApi } from "../Api/SignupApi";
+import { useDispatch } from "react-redux";
+import { userActive } from "../Redux/userredux";
 
-const Signup = () => {
+const Signup = ({ toggleForm }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [mobile, setMobile] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
-
+const dispatch = useDispatch()
   const validateForm = () => {
     const errors = {};
 
@@ -21,10 +24,10 @@ const Signup = () => {
       errors.email = "Email is invalid";
     }
 
-    if (!mobile.trim()) {
-      errors.mobile = "Mobile number is required";
-    } else if (!/^\d{10}$/.test(mobile)) {
-      errors.mobile = "Mobile number is invalid";
+    if (!phone.trim()) {
+      errors.phone = "phone number is required";
+    } else if (!/^\d{10}$/.test(phone)) {
+      errors.phone = "phone number is invalid";
     }
 
     if (!password.trim()) {
@@ -36,24 +39,35 @@ const Signup = () => {
 
     return errors;
   };
-
+const signupapicall = async()=>{
+  try{ 
+    const user = await signupApi({name,email,phone,password})
+    dispatch(userActive(user))
+    alert('signup successfull')
+    setName("");
+    setEmail("");
+    setPhone("");
+    setPassword("");
+    setErrors({});
+  }catch(err){
+    console.log("login error", err);
+      alert("An error occurred during signup. Please try again.");
+  }
+}
   const signupData = (e) => {
     e.preventDefault();
     const errors = validateForm();
     if (Object.keys(errors).length === 0) {
+      signupapicall()
       console.log("Form submitted successfully");
-      setName("");
-      setEmail("");
-      setMobile("");
-      setPassword("");
-      setErrors({});
+      
     } else {
       setErrors(errors);
     }
   };
 
   return (
-    <div className="signup-container font-Merriweather h-screen bg-yellow-300  flex flex-col justify-center items-center">
+    <div className="signup-container font-Merriweather h-screen flex flex-col justify-center items-center">
       <div className="w-[20rem] flex flex-col justify-around items-center bg-white p-6 rounded-lg shadow">
         <h2 className="text-4xl mb-4">Signup</h2>
         <form onSubmit={signupData} className="w-full">
@@ -86,14 +100,14 @@ const Signup = () => {
           <div className="w-full mb-4">
             <input
               type="text"
-              placeholder="Mobile Number"
+              placeholder="phone Number"
               className="p-2 rounded-md w-full border"
-              value={mobile}
-              onChange={(e) => setMobile(e.target.value)}
-              aria-label="Mobile Number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              aria-label="phone Number"
             />
-            {errors.mobile && (
-              <span className="error text-xs text-red-700">{errors.mobile}</span>
+            {errors.phone && (
+              <span className="error text-xs text-red-700">{errors.phone}</span>
             )}
           </div>
           <div className="w-full mb-4">
@@ -124,7 +138,13 @@ const Signup = () => {
         </div>
         <div className="mt-2 text-xs">
           <h2>
-            Already have an account? <span className="text-green-800 text-sm hover:cursor-pointer">Login</span>
+            Already have an account?{" "}
+            <span
+              className="text-green-800 text-sm hover:cursor-pointer"
+              onClick={toggleForm}
+            >
+              Login
+            </span>
           </h2>
         </div>
       </div>
