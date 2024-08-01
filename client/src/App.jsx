@@ -144,21 +144,17 @@ const App = () => {
   };
 
   return (
-    <BrowserRouter>
+    // <BrowserRouter>
       <div className="h-screen w-full overflow-auto no-scrollbar">
         <Routes>
           {token ? (
-            <Route path="/" element={renderHomePage()}>
-              <Route path="categories/" element={<Categories/>}>
-              </Route>
-              
-            </Route>
+            <Route path="/*" element={renderHomePage()}/>
           ) : (
             <Route path="/*" element={<Account />} />
           )}
         </Routes>
       </div>
-    </BrowserRouter>
+    // </BrowserRouter>
   );
 };
 
