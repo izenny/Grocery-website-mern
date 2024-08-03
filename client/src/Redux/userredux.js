@@ -11,7 +11,8 @@ const user = createSlice({
         },
         userlogOut:(state)=>{
             state.userInfo = [];
-        }
+        },
+        
     }
 })
 

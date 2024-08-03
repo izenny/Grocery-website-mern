@@ -42,7 +42,7 @@ import Navbar from "../Components/Navbar";
 import Home from "../Components/Home";
 import Footer from "../Components/Footer";
 import Categories from "./Categories";
-import Cart from "../Components/Cart";
+import Cart from "../Pages/Cart";
 import PlaceOrder from "./PlaceOrder";
 import ConfirmOrder from "./ConfirmOrder";
 

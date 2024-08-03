@@ -11,12 +11,16 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import UserRedux from "./userredux";
+import orderReducer from "./orderredux";
 const persistConfig = {
-    key: "user",
-    version: 1,
-    storage,
-  };
-  const rootReducer = combineReducers({ userDetails: UserRedux });
+  key: "user",
+  version: 1,
+  storage,
+};
+const rootReducer = combineReducers({
+  userDetails: UserRedux,
+  orderDetails: orderReducer,
+});
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({

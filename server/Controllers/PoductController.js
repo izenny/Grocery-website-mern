@@ -61,3 +61,28 @@ exports.getProductsByCategory = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// exports.getProductsById = async (req, res) => {
+//   try {
+//     const { productId } = req.body; // Change from req.body to req.params
+//     const product = await Product.findById(productId);
+//     if (!product) {
+//       return res.status(404).json({ message: "Product not found" });
+//     }
+//     res.status(200).json(product);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
+exports.getProductsById = async (req, res) => {
+  try {
+    const { productId } = req.params; // Change from req.body to req.params
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

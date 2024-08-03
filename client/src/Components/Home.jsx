@@ -9,7 +9,7 @@ const Home = () => {
       <div className=" w-full pt-4  flex flex-wrap ">
         <div className="w-1/3 ">
          
-          <img src={Vegitables} alt="" className="h-full w-full object-cover" />
+          <img src={Vegitables} alt="" className="h-full w-full object-contain" />
         </div>
         <div className="flex flex-col  justify-center items-center w-1/3  pl-12  ">
           <div className="text-center">
