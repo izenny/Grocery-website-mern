@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchCartItems, addtoCart, removeCartItem, updateCartItemQuantity } from "../Api/CartApi";
+import { fetchCartItems, addtoCart, removeCartItem, updateCartItemQuantity, removeCartApi } from "../Api/CartApi";
 
 // Async thunks
 export const fetchCart = createAsyncThunk("cart/fetchCart", async (userId) => {
@@ -12,7 +12,6 @@ export const addItem = createAsyncThunk(
   async ({ userId, productData }) => {
     const response = await addtoCart(userId, productData);
     console.log('dadaddadad',response);
-    
     return response;
   }
 );
@@ -31,7 +30,12 @@ export const updateQuantity = createAsyncThunk(
     return { productId, quantity, totalPrice: response.totalPrice }; // Include totalPrice in the response
   }
 );
-
+export const deleteCart = createAsyncThunk(
+  'cart/deleteCart',
+async(userId)=>{
+  const response = await removeCartApi(userId);
+  return response
+})
 
 // Slice
 const cartSlice = createSlice({
@@ -73,6 +77,10 @@ const cartSlice = createSlice({
           existingItem.quantity = quantity;
         }
         state.items.totalPrice = totalPrice; // Update totalPrice with the new value
+      })
+      .addCase(deleteCart.fulfilled,(state,action)=>{
+       
+        state.items = action.payload
       });
       
   },

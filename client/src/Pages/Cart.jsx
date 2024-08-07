@@ -3,7 +3,7 @@ import { RiShoppingCart2Line } from "react-icons/ri";
 import { MdOutlineRemoveShoppingCart } from "react-icons/md";
 import { TbShoppingCartMinus, TbShoppingCartPlus } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCart, removeItem, updateQuantity } from "../Redux/CartSlice";
+import { deleteCart, fetchCart, removeItem, updateQuantity } from "../Redux/CartSlice";
 
 const Cart = () => {
   const user = useSelector((state) => state.userDetails.userInfo[0]);
@@ -32,7 +32,9 @@ const Cart = () => {
     }
   };
 
-
+const removeAllItems =()=>{
+  dispatch(deleteCart(id))
+}
 
   return (
     <div className="w-full h-full p-4">
@@ -108,7 +110,9 @@ const Cart = () => {
             </div>
             <div className="flex justify-around items-center mt-4">
               <button className="p-1 m-1 w-1/3 font-Merriweather text-white text-xl flex justify-center items-center hover:scale-105 bg-orange-400 rounded-lg">Place order</button>
-              <button className="p-1 m-1 w-1/3 font-Merriweather text-white text-xl flex justify-center items-center hover:scale-105 bg-orange-400 rounded-lg">Remove All</button>
+              <button 
+              onClick={removeAllItems}
+              className="p-1 m-1 w-1/3 font-Merriweather text-white text-xl flex justify-center items-center hover:scale-105 bg-orange-400 rounded-lg">Remove All</button>
             </div>
           </>
         ) : (

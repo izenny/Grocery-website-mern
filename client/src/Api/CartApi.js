@@ -4,7 +4,7 @@ import { userRequest } from "../Request/RequestMethod";
 export const addtoCart = async (id, cartData) => {
   try {
     const response = await userRequest.post(`cart/addtocart/${id}`, cartData);
-    console.log("Added to cart", response.data);
+    console.log("Added to cart ddd", response.data);
     return response.data;
   } catch (err) {
     console.log("Error adding to cart", err);
@@ -37,7 +37,7 @@ export const removeCartItem = async (id, { productId }) => {
 };
 
 // Delete cart (remove all items)
-export const deleteCart = async (id) => {
+export const removeCartApi = async (id) => {
   try {
     const response = await userRequest.delete(`cart/deletecart/${id}`);
     console.log("Cart deleted", response.data);

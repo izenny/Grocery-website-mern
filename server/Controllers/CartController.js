@@ -23,7 +23,10 @@ exports.addToCart = async (req, res) => {
     cart.totalPrice += product.price * quantity;
     await cart.save();
     // res.status(200).json(cart);
-    res.status(200).json({product});
+    // res.status(200).json({product});
+     const updatedItem = cart.items.find(item => item.product.toString() === productId);
+
+    res.status(200).json({ product: updatedItem });
 
   } catch (err) {
     console.log('Error adding to cart', err);
