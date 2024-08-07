@@ -2,59 +2,37 @@ import React, { useEffect, useState } from "react";
 import { RiShoppingCart2Line } from "react-icons/ri";
 import { MdOutlineRemoveShoppingCart } from "react-icons/md";
 import { TbShoppingCartMinus, TbShoppingCartPlus } from "react-icons/tb";
-import { fetchCartItems } from "../Api/CartApi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCart, removeItem, updateQuantity } from "../Redux/CartSlice";
 
 const Cart = () => {
   const user = useSelector((state) => state.userDetails.userInfo[0]);
   const id = user?._id;
-  const [cart, setCart] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
+  const cart = useSelector((state) => state.cartDetails.items);
   const deliveryCharge = 20;
-
-  useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const cartData = await fetchCartItems(id);
-        setCart(cartData);
-      } catch (error) {
-        console.error("Error in fetching cart: ", error);
-        setError("Failed to fetch cart items. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (id) fetchCart();
-  }, [id]);
-
-  const handleRemoveItem = (index) => {
-    // Remove item from cart logic
-    const updatedCart = { ...cart };
-    updatedCart.items.splice(index, 1);
-    setCart(updatedCart);
-  };
-
-  const handleQuantityChange = (index, amount) => {
-    // Update item quantity logic
-    const updatedCart = { ...cart };
-    updatedCart.items[index].quantity += amount;
-    if (updatedCart.items[index].quantity < 1) {
-      updatedCart.items[index].quantity = 1;
-    }
-    setCart(updatedCart);
-  };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
+  const dispatch = useDispatch();
   const subtotal = cart?.totalPrice ? cart.totalPrice + deliveryCharge : deliveryCharge;
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchCart(id));
+    }
+  }, [id, dispatch]);
+
+  const handleRemoveItem = (productId) => {
+    dispatch(removeItem({ userId: id, productId }));
+  };
+
+  const handleQuantityChange = (productId, amount) => {
+    const item = cart.items.find((item) => item.product._id === productId);
+    if (item) {
+      const newQuantity = item.quantity + amount;
+      if (newQuantity > 0) {
+        dispatch(updateQuantity({ userId: id, productId, quantity: newQuantity }));
+      }
+    }
+  };
+
+
 
   return (
     <div className="w-full h-full p-4">
@@ -67,12 +45,12 @@ const Cart = () => {
       <div className="">
         {cart?.items?.length ? (
           <>
-            <div className="flex flex-wrap justify-center  overflow-y-scroll no-scrollbar">
-              {cart.items.map((item, index) => (
+            <div className="flex flex-wrap justify-center overflow-y-scroll no-scrollbar">
+              {cart?.items.map((item, index) => (
                 <div key={index} className="relative flex m-2 rounded-xl shadow bg-orange-100 justify-around items-center w-full md:w-1/3 h-[8rem]">
                   <div
                     className="absolute -top-2 -right-2 bg-orange-400 text-white rounded-full hover:bg-red-500 cursor-pointer hover:scale-105 p-2 text-xl"
-                    onClick={() => handleRemoveItem(index)}
+                    onClick={() => handleRemoveItem(item.product._id)}
                   >
                     <MdOutlineRemoveShoppingCart />
                   </div>
@@ -88,21 +66,19 @@ const Cart = () => {
                     <h2 className="text-sm">{item.product.description}</h2>
                     <div className="flex">
                       <h2 className="mr-2">{`Price: ₹${item.product.price}`}</h2>
-                      <h2 className="text-green-500">{item.product.inStock ? "In stock" : "Out of stock"}</h2>
+                      <h2 className="text-green-500">{item.product.Stock <= 0 ? "In stock" : "Out of stock"}</h2>
                     </div>
                     <div className="flex-row flex h-fit">
                       <button
                         className="p-1 m-1 w-16 font-Merriweather text-white text-xl flex justify-center items-center hover:scale-105 bg-orange-400 rounded-lg"
-                        onClick={() => handleQuantityChange(index, 1)}
+                        onClick={() => handleQuantityChange(item.product._id, 1)}
                       >
                         <TbShoppingCartPlus />
                       </button>
-                      <div className="w-16 border m-1 shadow text-center p-1 rounded-lg">
-                        {item.quantity}
-                      </div>
+                      <div className="w-16 border m-1 shadow text-center p-1 rounded-lg">{item?.quantity}</div>
                       <button
                         className="p-1 m-1 w-16 font-Merriweather text-white flex justify-center text-xl items-center hover:scale-105 bg-orange-400 rounded-lg"
-                        onClick={() => handleQuantityChange(index, -1)}
+                        onClick={() => handleQuantityChange(item.product._id, -1)}
                       >
                         <TbShoppingCartMinus />
                       </button>
@@ -131,18 +107,12 @@ const Cart = () => {
               </div>
             </div>
             <div className="flex justify-around items-center mt-4">
-              <button className="p-1 m-1 w-1/3 font-Merriweather text-white text-xl flex justify-center items-center hover:scale-105 bg-orange-400 rounded-lg">
-                Place order
-              </button>
-              <button className="p-1 m-1 w-1/3 font-Merriweather text-white text-xl flex justify-center items-center hover:scale-105 bg-orange-400 rounded-lg">
-                Remove All
-              </button>
+              <button className="p-1 m-1 w-1/3 font-Merriweather text-white text-xl flex justify-center items-center hover:scale-105 bg-orange-400 rounded-lg">Place order</button>
+              <button className="p-1 m-1 w-1/3 font-Merriweather text-white text-xl flex justify-center items-center hover:scale-105 bg-orange-400 rounded-lg">Remove All</button>
             </div>
           </>
         ) : (
-          <div className="text-center  flex justify-center items-center text-lg font-Merriweather">
-            Your cart is empty.
-          </div>
+          <div className="text-center flex justify-center items-center text-lg font-Merriweather">Your cart is empty.</div>
         )}
       </div>
     </div>
